@@ -24,6 +24,7 @@ namespace Luny.ContractTest
 
 			var engine = LunyEngine.Instance;
 			Assert.That(engine, Is.Not.Null, "LunyEngine.Instance should not be null after initialization");
+			Assert.That(engine.Scene.CurrentScene, Is.Not.Null);
 
 			var obj = engine.Object.CreateEmpty("TestObject");
 			Assert.That(obj, Is.Not.Null, "engine.Object.CreateEmpty should not return null");

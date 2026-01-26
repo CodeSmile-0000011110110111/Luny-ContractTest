@@ -10,13 +10,39 @@ using Time = UnityEngine.Time;
 
 namespace Luny.ContractTest
 {
+	public enum EngineType
+	{
+		Unity,
+		Godot
+	}
+
 	public static class EngineSimulator
 	{
+		public static void Tick(EngineType type, Double deltaTime = 1.0 / 60.0)
+		{
+			if (type == EngineType.Unity)
+			{
+				UnityEngine.Time.frameCount++;
+				UnityTick((Single)deltaTime);
+			}
+			else
+			{
+				Godot_Time.SimulatedFrameCount++;
+				GodotTick(deltaTime);
+			}
+		}
+
+		public static void RunFrames(EngineType type, Int32 count, Double deltaTime = 1.0 / 60.0)
+		{
+			for (var i = 0; i < count; i++)
+				Tick(type, deltaTime);
+		}
+
 		public static void UnityTick(Single deltaTime = 1f / 60f)
 		{
-			Time.deltaTime = deltaTime;
-			Time.time += deltaTime;
-			Time.frameCount++;
+			UnityEngine.Time.deltaTime = deltaTime;
+			UnityEngine.Time.time += deltaTime;
+			// Time.frameCount++; // Don't increment here, let's keep it steady for the frame
 
 			var mbs = Object._allObjects.OfType<MonoBehaviour>().ToList();
 
@@ -40,24 +66,42 @@ namespace Luny.ContractTest
 				}
 			}
 
+			// FixedUpdate
+			foreach (var mb in mbs)
+			{
+				if (mb.isActiveAndEnabled)
+					mb.InternalFixedUpdate();
+			}
+
 			// Update
 			foreach (var mb in mbs)
 			{
 				if (mb.isActiveAndEnabled)
 					mb.InternalUpdate();
 			}
+
+			// LateUpdate
+			foreach (var mb in mbs)
+			{
+				if (mb.isActiveAndEnabled)
+					mb.InternalLateUpdate();
+			}
 		}
 
 		public static void GodotTick(Double deltaTime = 1.0 / 60.0)
 		{
-			Godot_Time.SimulatedFrameCount++;
+			// Godot_Time.SimulatedFrameCount++;
 			Godot_Time.SimulatedTimeMsec += (UInt64)(deltaTime * 1000.0);
 
 			var nodes = GodotObject._allObjects.OfType<Node>().ToList();
 			foreach (var node in nodes)
 			{
 				if (node.IsInsideTree() && node.CanProcess())
+				{
+					Console.WriteLine($"[DEBUG_LOG] Ticking Godot Node: {node.Name}");
+					node._PhysicsProcess(deltaTime);
 					node._Process(deltaTime);
+				}
 			}
 		}
 
@@ -69,16 +113,18 @@ namespace Luny.ContractTest
 
 			Object.Reset_UnitTestsOnly();
 			GodotObject.Reset_UnitTestsOnly();
+			SceneTree.ForceReset_UnitTestsOnly(); // Re-creates SceneTree.Instance
 
-			// Re-initialize Godot Root
+			// Re-initialize Godot SceneTree and Root
 			var sceneTree = SceneTree.Instance;
-			GodotObject._allObjects.Add(sceneTree.Root);
+			// SceneTree and Root are GodotObjects, they add themselves to _allObjects in ctor
+			sceneTree.Root.SetInsideTree(true); // Ensure Root is inside tree
 
-			Time.time = 0;
-			Time.frameCount = 0;
-			Time.deltaTime = 1f / 60f;
+			UnityEngine.Time.time = 0;
+			UnityEngine.Time.frameCount = 0; 
+			UnityEngine.Time.deltaTime = 1f / 60f;
 
-			Godot_Time.SimulatedFrameCount = 0;
+			Godot_Time.SimulatedFrameCount = 0; 
 			Godot_Time.SimulatedTimeMsec = 0;
 		}
 	}

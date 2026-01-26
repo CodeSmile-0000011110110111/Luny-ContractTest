@@ -26,6 +26,7 @@ namespace Luny.ContractTest
 
 			var engine = LunyEngine.Instance;
 			Assert.That(engine, Is.Not.Null);
+			Assert.That(engine.Scene.CurrentScene, Is.Not.Null);
 
 			var obj = engine.Object.CreateEmpty("TestNode");
 			Assert.That(obj, Is.Not.Null);
