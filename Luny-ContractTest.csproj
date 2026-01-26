@@ -26,5 +26,7 @@
     <ProjectReference Include="..\Luny.csproj" />
     <ProjectReference Include="..\Luny.Unity-Mock.csproj" />
     <ProjectReference Include="..\Luny.Godot-Mock.csproj" />
+    <ProjectReference Include="..\Luny.Unity.csproj" />
+    <ProjectReference Include="..\Luny.Godot.csproj" />
   </ItemGroup>
 </Project>
