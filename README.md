@@ -1,2 +1,2 @@
-# Luny.Godot-Mock
-Godot Engine mocks and shims for LunyEngine development and testing
+# Luny-ContractTest
+Contract tests for native engine behaviour, testing both engine mocks/shims and actual engine API/behaviour
