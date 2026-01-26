@@ -3,41 +3,41 @@ using UnityEngine;
 
 namespace Luny.ContractTest
 {
-    [TestFixture]
-    public class UnityHierarchyTests
-    {
-        [SetUp]
-        public void Setup() => EngineSimulator.Reset();
+	[TestFixture]
+	public class UnityHierarchyTests
+	{
+		[SetUp]
+		public void Setup() => EngineSimulator.Reset();
 
-        [Test]
-        public void GameObject_ActiveInHierarchy_InheritsFromParent()
-        {
-            var parent = new GameObject("Parent");
-            var child = new GameObject("Child");
-            child.transform.parent = parent.transform;
+		[Test]
+		public void GameObject_ActiveInHierarchy_InheritsFromParent()
+		{
+			var parent = new GameObject("Parent");
+			var child = new GameObject("Child");
+			child.transform.parent = parent.transform;
 
-            Assert.That(parent.activeInHierarchy, Is.True, "Parent should be active initially");
-            Assert.That(child.activeInHierarchy, Is.True, "Child should be active initially");
+			Assert.That(parent.activeInHierarchy, Is.True, "Parent should be active initially");
+			Assert.That(child.activeInHierarchy, Is.True, "Child should be active initially");
 
-            parent.SetActive(false);
-            Assert.That(parent.activeInHierarchy, Is.False, "Parent should be inactive");
-            Assert.That(child.activeInHierarchy, Is.False, "Child should be inactive because parent is inactive");
+			parent.SetActive(false);
+			Assert.That(parent.activeInHierarchy, Is.False, "Parent should be inactive");
+			Assert.That(child.activeInHierarchy, Is.False, "Child should be inactive because parent is inactive");
 
-            parent.SetActive(true);
-            Assert.That(child.activeInHierarchy, Is.True, "Child should be active again");
-        }
+			parent.SetActive(true);
+			Assert.That(child.activeInHierarchy, Is.True, "Child should be active again");
+		}
 
-        [Test]
-        public void Transform_Position_InheritsFromParent()
-        {
-            var parent = new GameObject("Parent");
-            var child = new GameObject("Child");
-            child.transform.parent = parent.transform;
+		[Test]
+		public void Transform_Position_InheritsFromParent()
+		{
+			var parent = new GameObject("Parent");
+			var child = new GameObject("Child");
+			child.transform.parent = parent.transform;
 
-            parent.transform.localPosition = new Vector3(10, 0, 0);
-            child.transform.localPosition = new Vector3(5, 0, 0);
+			parent.transform.localPosition = new Vector3(10, 0, 0);
+			child.transform.localPosition = new Vector3(5, 0, 0);
 
-            Assert.That(child.transform.position.x, Is.EqualTo(15f), "Child world position should be sum of parent and local");
-        }
-    }
+			Assert.That(child.transform.position.x, Is.EqualTo(15f), "Child world position should be sum of parent and local");
+		}
+	}
 }

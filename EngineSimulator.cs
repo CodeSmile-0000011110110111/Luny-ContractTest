@@ -1,84 +1,85 @@
+using Godot;
+using Luny.Godot.Engine;
+using Luny.Unity.Engine;
 using System;
 using System.Linq;
 using UnityEngine;
-using Godot;
+using Godot_Time = Godot.Time;
+using Object = UnityEngine.Object;
+using Time = UnityEngine.Time;
 
 namespace Luny.ContractTest
 {
-    public static class EngineSimulator
-    {
-        public static void UnityTick(float deltaTime = 1f / 60f)
-        {
-            UnityEngine.Time.deltaTime = deltaTime;
-            UnityEngine.Time.time += deltaTime;
-            UnityEngine.Time.frameCount++;
+	public static class EngineSimulator
+	{
+		public static void UnityTick(Single deltaTime = 1f / 60f)
+		{
+			Time.deltaTime = deltaTime;
+			Time.time += deltaTime;
+			Time.frameCount++;
 
-            var mbs = UnityEngine.Object._allObjects.OfType<MonoBehaviour>().ToList();
-            
-            // Awake
-            foreach (var mb in mbs)
-            {
-                if (!mb._awakeCalled && mb.gameObject.activeInHierarchy)
-                {
-                    mb._awakeCalled = true;
-                    mb.InternalAwake();
-                }
-            }
+			var mbs = Object._allObjects.OfType<MonoBehaviour>().ToList();
 
-            // Start
-            foreach (var mb in mbs)
-            {
-                if (!mb._startCalled && mb.isActiveAndEnabled)
-                {
-                    mb._startCalled = true;
-                    mb.InternalStart();
-                }
-            }
+			// Awake
+			foreach (var mb in mbs)
+			{
+				if (!mb._awakeCalled && mb.gameObject.activeInHierarchy)
+				{
+					mb._awakeCalled = true;
+					mb.InternalAwake();
+				}
+			}
 
-            // Update
-            foreach (var mb in mbs)
-            {
-                if (mb.isActiveAndEnabled)
-                {
-                    mb.InternalUpdate();
-                }
-            }
-        }
+			// Start
+			foreach (var mb in mbs)
+			{
+				if (!mb._startCalled && mb.isActiveAndEnabled)
+				{
+					mb._startCalled = true;
+					mb.InternalStart();
+				}
+			}
 
-        public static void GodotTick(double deltaTime = 1.0 / 60.0)
-        {
-            global::Godot.Time.SimulatedFrameCount++;
-            global::Godot.Time.SimulatedTimeMsec += (ulong)(deltaTime * 1000.0);
+			// Update
+			foreach (var mb in mbs)
+			{
+				if (mb.isActiveAndEnabled)
+					mb.InternalUpdate();
+			}
+		}
 
-            var nodes = global::Godot.GodotObject._allObjects.OfType<global::Godot.Node>().ToList();
-            foreach (var node in nodes)
-            {
-                if (node.IsInsideTree() && node.CanProcess())
-                {
-                    node._Process(deltaTime);
-                }
-            }
-        }
+		public static void GodotTick(Double deltaTime = 1.0 / 60.0)
+		{
+			Godot_Time.SimulatedFrameCount++;
+			Godot_Time.SimulatedTimeMsec += (UInt64)(deltaTime * 1000.0);
 
-        public static void Reset()
-        {
-            LunyEngine.ForceReset_UnityEditorAndUnitTestsOnly();
-            Luny.Unity.Engine.LunyEngineUnityAdapter.ForceReset_UnitTestsOnly();
-            Luny.Godot.Engine.LunyEngineGodotAdapter.ForceReset_UnitTestsOnly();
+			var nodes = GodotObject._allObjects.OfType<Node>().ToList();
+			foreach (var node in nodes)
+			{
+				if (node.IsInsideTree() && node.CanProcess())
+					node._Process(deltaTime);
+			}
+		}
 
-            UnityEngine.Object.Reset_UnitTestsOnly();
-            global::Godot.GodotObject.Reset_UnitTestsOnly();
+		public static void Reset()
+		{
+			LunyEngine.ForceReset_UnityEditorAndUnitTestsOnly();
+			LunyEngineUnityAdapter.ForceReset_UnitTestsOnly();
+			LunyEngineGodotAdapter.ForceReset_UnitTestsOnly();
 
-            // Re-initialize Godot Root
-            var sceneTree = global::Godot.SceneTree.Instance;
-            global::Godot.GodotObject._allObjects.Add(sceneTree.Root);
+			Object.Reset_UnitTestsOnly();
+			GodotObject.Reset_UnitTestsOnly();
 
-            UnityEngine.Time.time = 0;
-            UnityEngine.Time.frameCount = 0;
-            UnityEngine.Time.deltaTime = 1f / 60f;
-            
-            global::Godot.Time.SimulatedFrameCount = 0;
-            global::Godot.Time.SimulatedTimeMsec = 0;
-        }
-    }
+			// Re-initialize Godot Root
+			var sceneTree = SceneTree.Instance;
+			GodotObject._allObjects.Add(sceneTree.Root);
+
+			Time.time = 0;
+			Time.frameCount = 0;
+			Time.deltaTime = 1f / 60f;
+
+			Godot_Time.SimulatedFrameCount = 0;
+			Godot_Time.SimulatedTimeMsec = 0;
+		}
+	}
 }

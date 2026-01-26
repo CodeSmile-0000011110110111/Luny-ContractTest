@@ -1,53 +1,54 @@
 using NUnit.Framework;
-using UnityEngine;
+using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Luny.ContractTest
 {
-    public class MockMonoBehaviour : MonoBehaviour
-    {
-        public List<string> Calls = new();
+	public class MockMonoBehaviour : MonoBehaviour
+	{
+		public List<String> Calls = new();
 
-        protected override void Awake() => Calls.Add("Awake");
-        protected override void Start() => Calls.Add("Start");
-        protected override void Update() => Calls.Add("Update");
-        protected override void OnEnable() => Calls.Add("OnEnable");
-        protected override void OnDisable() => Calls.Add("OnDisable");
-        protected override void OnDestroy() => Calls.Add("OnDestroy");
-    }
+		private void Awake() => Calls.Add("Awake");
+		private void Start() => Calls.Add("Start");
+		private void Update() => Calls.Add("Update");
+		private void OnEnable() => Calls.Add("OnEnable");
+		private void OnDisable() => Calls.Add("OnDisable");
+		private void OnDestroy() => Calls.Add("OnDestroy");
+	}
 
-    [TestFixture]
-    public class UnityLifecycleTests
-    {
-        [SetUp]
-        public void Setup() => EngineSimulator.Reset();
+	[TestFixture]
+	public class UnityLifecycleTests
+	{
+		[SetUp]
+		public void Setup() => EngineSimulator.Reset();
 
-        [Test]
-        public void MonoBehaviour_Lifecycle_Order()
-        {
-            var go = new GameObject("Test");
-            var mb = go.AddComponent<MockMonoBehaviour>();
+		[Test]
+		public void MonoBehaviour_Lifecycle_Order()
+		{
+			var go = new GameObject("Test");
+			var mb = go.AddComponent<MockMonoBehaviour>();
 
-            EngineSimulator.UnityTick();
+			EngineSimulator.UnityTick();
 
-            Assert.That(mb.Calls, Is.EqualTo(new[] { "Awake", "OnEnable", "Start", "Update" }));
-        }
+			Assert.That(mb.Calls, Is.EqualTo(new[] { "Awake", "OnEnable", "Start", "Update" }));
+		}
 
-        [Test]
-        public void MonoBehaviour_NotActive_NoLifecycle()
-        {
-            var go = new GameObject("Test");
-            go.SetActive(false);
-            var mb = go.AddComponent<MockMonoBehaviour>();
+		[Test]
+		public void MonoBehaviour_NotActive_NoLifecycle()
+		{
+			var go = new GameObject("Test");
+			go.SetActive(false);
+			var mb = go.AddComponent<MockMonoBehaviour>();
 
-            EngineSimulator.UnityTick();
+			EngineSimulator.UnityTick();
 
-            Assert.That(mb.Calls, Is.EqualTo(new[] { "Awake" }));
+			Assert.That(mb.Calls, Is.EqualTo(new[] { "Awake" }));
 
-            go.SetActive(true);
-            EngineSimulator.UnityTick();
+			go.SetActive(true);
+			EngineSimulator.UnityTick();
 
-            Assert.That(mb.Calls, Is.EqualTo(new[] { "Awake", "OnEnable", "Start", "Update" }));
-        }
-    }
+			Assert.That(mb.Calls, Is.EqualTo(new[] { "Awake", "OnEnable", "Start", "Update" }));
+		}
+	}
 }
