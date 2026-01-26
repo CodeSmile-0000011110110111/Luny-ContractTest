@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Luny-ContractTest")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6aadd5faf11e84014276d83d83024bf9679b15d1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fe2f0697dc56b830731b4c27e346b9c3f7d68834")]
 [assembly: System.Reflection.AssemblyProductAttribute("Luny-ContractTest")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Luny-ContractTest")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

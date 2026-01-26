@@ -102,3 +102,5 @@ U:\LunyScratch\LunyScript_UnitTests\Luny-ContractTest\obj\Debug\net8.0\Luny-Cont
 U:\LunyScratch\LunyScript_UnitTests\Luny-ContractTest\obj\Debug\net8.0\Luny-ContractTest.genruntimeconfig.cache
 U:\LunyScratch\LunyScript_UnitTests\Luny-ContractTest\obj\Debug\net8.0\ref\Luny-ContractTest.dll
 U:\LunyScratch\LunyScript_UnitTests\Luny-ContractTest\bin\Debug\net8.0\Luny.Unity-Mock.pdb
+U:\LunyScratch\LunyScript_UnitTests\Luny-ContractTest\bin\Debug\net8.0\Luny.pdb
+U:\LunyScratch\LunyScript_UnitTests\Luny-ContractTest\bin\Debug\net8.0\Luny.Godot-Mock.pdb
