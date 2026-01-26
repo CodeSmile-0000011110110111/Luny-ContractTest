@@ -7,6 +7,7 @@ using System.Linq;
 namespace Luny.ContractTest
 {
     [TestFixture]
+    [NonParallelizable]
     public class UnityBridgeTests
     {
         [SetUp]
@@ -15,6 +16,7 @@ namespace Luny.ContractTest
         [Test]
         public void UnityObjectService_CreateEmpty_RegistersInLuny()
         {
+            MonoBehaviour.LogAllMethods(typeof(LunyEngineUnityAdapter));
             // For this test, use the official Initialize method
             LunyEngineUnityAdapter.Initialize();
             
@@ -37,7 +39,7 @@ namespace Luny.ContractTest
         }
 
         [Test]
-        public void UnityObjectRegistry_GetSingleObject_FindsExistingNativeObject()
+        public void UnityObjectRegistry_FindByName_FindsExistingNativeObject()
         {
             LunyEngineUnityAdapter.Initialize();
             EngineSimulator.UnityTick();
@@ -48,10 +50,10 @@ namespace Luny.ContractTest
             var engine = LunyEngine.Instance;
             Assert.That(engine, Is.Not.Null, "LunyEngine.Instance should not be null");
             
-            // GetSingleObject should find it and register it
+            // FindByName should find it and register it
             var lunyObj = engine.Objects.FindByName("NativeOnly");
             
-            Assert.That(lunyObj, Is.Not.Null, "GetSingleObject should find the native object");
+            Assert.That(lunyObj, Is.Not.Null, "FindByName should find the native object");
             Assert.That(lunyObj.Name, Is.EqualTo("NativeOnly"), "Object name should match native name");
             Assert.That(engine.Objects.AllObjects.Contains(lunyObj), Is.True, "Found object should be registered");
         }

@@ -30,7 +30,7 @@ namespace Luny.ContractTest
 
             EngineSimulator.UnityTick();
 
-            Assert.That(mb.Calls, Is.EqualTo(new[] { "OnEnable", "Awake", "Start", "Update" }));
+            Assert.That(mb.Calls, Is.EqualTo(new[] { "Awake", "OnEnable", "Start", "Update" }));
         }
 
         [Test]
@@ -42,12 +42,12 @@ namespace Luny.ContractTest
 
             EngineSimulator.UnityTick();
 
-            Assert.That(mb.Calls, Is.Empty);
+            Assert.That(mb.Calls, Is.EqualTo(new[] { "Awake" }));
 
             go.SetActive(true);
             EngineSimulator.UnityTick();
 
-            Assert.That(mb.Calls, Is.EqualTo(new[] { "OnEnable", "Awake", "Start", "Update" }));
+            Assert.That(mb.Calls, Is.EqualTo(new[] { "Awake", "OnEnable", "Start", "Update" }));
         }
     }
 }

@@ -7,6 +7,7 @@ using System.Linq;
 namespace Luny.ContractTest
 {
     [TestFixture]
+    [NonParallelizable]
     public class GodotBridgeTests
     {
         [SetUp]
@@ -40,7 +41,7 @@ namespace Luny.ContractTest
         }
 
         [Test]
-        public void GodotObjectRegistry_GetSingleObject_FindsExistingNativeNode()
+        public void GodotObjectRegistry_FindByName_FindsExistingNativeNode()
         {
             var adapter = new LunyEngineGodotAdapter();
             SceneTree.Instance.Root.AddChild(adapter);
@@ -56,7 +57,7 @@ namespace Luny.ContractTest
             
             var engine = LunyEngine.Instance;
             
-            // GetSingleObject should find it and register it
+            // FindByName should find it and register it
             var lunyObj = engine.Objects.FindByName("NativeOnly");
             
             Assert.That(lunyObj, Is.Not.Null);
