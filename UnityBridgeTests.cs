@@ -6,21 +6,16 @@ using UnityEngine;
 namespace Luny.ContractTest
 {
 	[TestFixture]
-	[NonParallelizable]
-	public class UnityBridgeTests
+	public class UnityBridgeTests : ContractTestBase
 	{
-		[SetUp]
-		public void Setup() => EngineSimulator.Reset();
+		protected override NativeEngine Engine => NativeEngine.Unity;
 
 		[Test]
 		public void UnityObjectService_CreateEmpty_RegistersInLuny()
 		{
 			MonoBehaviour.LogAllMethods(typeof(LunyEngineUnityAdapter));
-			// For this test, use the official Initialize method
-			LunyEngineUnityAdapter.Initialize();
 
-			// Advance simulation to trigger Awake/Start
-			EngineSimulator.UnityTick();
+			SimulateFrame(); // Advance simulation to trigger Awake/Start
 
 			var engine = LunyEngine.Instance;
 			Assert.That(engine, Is.Not.Null, "LunyEngine.Instance should not be null after initialization");
@@ -41,8 +36,7 @@ namespace Luny.ContractTest
 		[Test]
 		public void UnityObjectRegistry_FindByName_FindsExistingNativeObject()
 		{
-			LunyEngineUnityAdapter.Initialize();
-			EngineSimulator.UnityTick();
+			SimulateFrame(); // Advance simulation to trigger Awake/Start
 
 			// Create a native object NOT through Luny
 			var nativeGo = new GameObject("NativeOnly");

@@ -1,17 +1,28 @@
 using Luny.Engine;
-using Luny.ContractTest.Base;
 using NUnit.Framework;
 using System;
 using System.Linq;
 
-namespace Luny.ContractTest
+namespace Luny.ContractTest.MockTests
 {
-	[NonParallelizable]
-	public abstract class LunyEngineObserverContractTests : ContractTestBase
+	[TestFixture]
+	public class GodotEngineObserverTests : MockEngineObserverTests
+	{
+		protected override NativeEngine Engine => NativeEngine.Godot;
+	}
+
+	[TestFixture]
+	public class UnityEngineObserverTests : MockEngineObserverTests
+	{
+		protected override NativeEngine Engine => NativeEngine.Unity;
+	}
+
+	public abstract class MockEngineObserverTests : ContractTestBase
 	{
 		private readonly String[] _expectedMethodCallOrder =
 		{
 			nameof(ILunyEngineObserver.OnEngineStartup),
+			nameof(ILunyEngineObserver.OnSceneLoaded),
 			nameof(ILunyEngineObserver.OnEnginePreUpdate),
 			nameof(ILunyEngineObserver.OnEngineFixedStep),
 			nameof(ILunyEngineObserver.OnEngineUpdate),
@@ -29,21 +40,16 @@ namespace Luny.ContractTest
 			nameof(ILunyEngineObserver.OnEnginePostUpdate),
 		};
 
-		protected abstract void ShutdownEngine();
-
 		[Test]
 		public void Observer_LifecycleCallOrder_IsCorrect()
 		{
 			var observer = LunyEngine.Instance.GetObserver<MockEngineObserver>();
-			RunFrames(1);
-			ShutdownEngine();
+			ShutdownEngine(); // shutdown guarantees one simulated frame
 
 			// Filter out OnSceneLoaded/Unloaded
 			var actualOrder = observer.CallOrder.Where(name => _expectedMethodCallOrder.Contains(name)).ToArray();
 			if (actualOrder.Length != _expectedMethodCallOrder.Length)
-			{
-				Console.WriteLine($"[DEBUG_LOG] Actual Call Order: {String.Join(", ", observer.CallOrder)}");
-			}
+				Console.WriteLine($"[DEBUG_LOG] Actual Call Order:\n{String.Join("\n", observer.CallOrder)}");
 			Assert.That(actualOrder, Is.EqualTo(_expectedMethodCallOrder));
 
 			foreach (var methodName in _expectedMethodCallOrder)
@@ -56,14 +62,16 @@ namespace Luny.ContractTest
 		[Test]
 		public void Observer_UpdateCallCount_IsCorrect()
 		{
-			var updateCount = 5;
+			var updateCount = 3;
 			var observer = LunyEngine.Instance.GetObserver<MockEngineObserver>();
-			RunFrames(updateCount);
+			SimulateFrames(updateCount);
 
+			var expectedUpdateCount = updateCount + 1; // accounts for the initialization frame
 			foreach (var methodName in _repeatingMethods)
 			{
-				Assert.That(observer.CallOrder.Count(name => name == methodName), Is.EqualTo(updateCount),
-					$"[{Engine}] {methodName} expected to be called exactly {updateCount} times. Actual calls: {String.Join(", ", observer.CallOrder)}");
+				Assert.That(observer.RepeatingCallOrder.Count(name => name == methodName), Is.EqualTo(expectedUpdateCount),
+					$"[{Engine}] {methodName} expected to be called exactly {updateCount} times. Actual calls:\n" +
+					$"{String.Join("\n", observer.RepeatingCallOrder)}");
 			}
 		}
 
@@ -71,14 +79,15 @@ namespace Luny.ContractTest
 		public void ObserverCallbacks_FrameCountInFirstFrame_IsOne()
 		{
 			var observer = LunyEngine.Instance.GetObserver<MockEngineObserver>();
-			RunFrames(1);
+			SimulateFrames(1);
 			ShutdownEngine();
 
-			var callbackNames = Enum.GetNames(typeof(EngineCallback));
+			var callbackNames = Enum.GetNames(typeof(MockEngineObserver.CallbackMethod));
 			for (var i = 0; i < observer.FrameCounts.Length; i++)
 			{
 				var frameCount = observer.FrameCounts[i];
-				Assert.That(frameCount, Is.EqualTo(1), $"[{Engine}] FrameCount is {frameCount} in {callbackNames[i]}, expected: 1. Actual calls: {String.Join(", ", observer.CallOrder)}");
+				Assert.That(frameCount, Is.EqualTo(1),
+					$"[{Engine}] FrameCount is {frameCount} in {callbackNames[i]}, expected: 1. Actual calls: {String.Join(", ", observer.CallOrder)}");
 			}
 		}
 	}

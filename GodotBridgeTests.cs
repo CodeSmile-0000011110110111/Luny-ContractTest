@@ -1,28 +1,18 @@
 using Godot;
-using Luny.Godot.Engine;
 using NUnit.Framework;
 using System.Linq;
 
 namespace Luny.ContractTest
 {
 	[TestFixture]
-	[NonParallelizable]
-	public class GodotBridgeTests
+	public class GodotBridgeTests : ContractTestBase
 	{
-		[SetUp]
-		public void Setup() => EngineSimulator.Reset();
+		protected override NativeEngine Engine => NativeEngine.Godot;
 
 		[Test]
 		public void GodotObjectService_CreateEmpty_RegistersInLuny()
 		{
-			// Similar to Unity, we need to initialize the Godot adapter
-			// LunyEngineGodotAdapter in real Godot is a Node added to the tree.
-
-			var adapter = new LunyEngineGodotAdapter();
-			SceneTree.Instance.Root.AddChild(adapter);
-
-			// Advance simulation
-			EngineSimulator.GodotTick();
+			SimulateFrame(); // Advance simulation
 
 			var engine = LunyEngine.Instance;
 			Assert.That(engine, Is.Not.Null);
@@ -43,13 +33,7 @@ namespace Luny.ContractTest
 		[Test]
 		public void GodotObjectRegistry_FindByName_FindsExistingNativeNode()
 		{
-			var adapter = new LunyEngineGodotAdapter();
-			SceneTree.Instance.Root.AddChild(adapter);
-
-			// Initialize the current scene
-			SceneTree.Instance.ChangeSceneToFile("res://test.tscn");
-
-			EngineSimulator.GodotTick();
+			SimulateFrame(); // Advance simulation
 
 			// Create a native node NOT through Luny, must be in CurrentScene to be found by SceneService
 			var nativeNode = new Node { Name = "NativeOnly" };

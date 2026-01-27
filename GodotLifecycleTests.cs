@@ -1,4 +1,5 @@
 using Godot;
+using Luny.Godot.Engine;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -15,10 +16,9 @@ namespace Luny.ContractTest
 	}
 
 	[TestFixture]
-	public class GodotLifecycleTests
+	public class GodotLifecycleTests : ContractTestBase
 	{
-		[SetUp]
-		public void Setup() => EngineSimulator.Reset();
+		protected override NativeEngine Engine => NativeEngine.Godot;
 
 		[Test]
 		public void Node_Lifecycle_Ready_Called_When_Entering_Tree()
@@ -36,6 +36,8 @@ namespace Luny.ContractTest
 		[Test]
 		public void Node_Lifecycle_Process_Called_During_Tick()
 		{
+			EngineSimulator.SimulateFrame(Engine);
+
 			var root = new Node { Name = "Root" };
 			root.SetInsideTree(true);
 			var child = new MockNode { Name = "Child" };
@@ -48,6 +50,8 @@ namespace Luny.ContractTest
 		[Test]
 		public void Node_Lifecycle_ExitTree_Called_When_Leaving_Tree()
 		{
+			EngineSimulator.SimulateFrame(Engine);
+
 			var root = new Node { Name = "Root" };
 			root.SetInsideTree(true);
 			var child = new MockNode { Name = "Child" };
