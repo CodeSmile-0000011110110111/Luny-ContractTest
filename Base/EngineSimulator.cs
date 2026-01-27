@@ -32,27 +32,13 @@ namespace Luny.ContractTest
 
 			var mbs = UnityObject._allObjects.OfType<MonoBehaviour>().ToList();
 
-			// Awake
-			foreach (var mb in mbs)
-			{
-				if (!mb._awakeCalled && mb.gameObject.activeInHierarchy)
-				{
-					mb._awakeCalled = true;
-					mb.InternalAwake();
-
-					if (mb.enabled)
-						mb.InternalOnEnable();
-				}
-			}
+			// Awake => is handled by AddComponent & SetActive
 
 			// Start
 			foreach (var mb in mbs)
 			{
-				if (!mb._startCalled && mb.isActiveAndEnabled)
-				{
-					mb._startCalled = true;
+				if (mb.isActiveAndEnabled)
 					mb.InternalStart();
-				}
 			}
 
 			// FixedUpdate
@@ -81,6 +67,8 @@ namespace Luny.ContractTest
 		{
 			GodotTime.SimulatedFrameCount++;
 			GodotTime.SimulatedTimeMsec += (UInt64)(deltaTime * 1000.0);
+
+			// TODO: call _Ready here
 
 			var nodes = GodotObject._allObjects.OfType<Node>().ToList();
 			foreach (var node in nodes)

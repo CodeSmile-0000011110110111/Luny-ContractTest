@@ -9,10 +9,10 @@ namespace Luny.ContractTest
 {
 	public abstract class ContractTestBase
 	{
+		private Boolean _didShutdownEngine;
 		protected abstract NativeEngine Engine { get; }
 
 		protected ILunyEngineNativeAdapter EngineAdapter { get; private set; }
-		private bool _didShutdownEngine;
 
 		[SetUp]
 		protected void InitializeEngine()
@@ -35,8 +35,6 @@ namespace Luny.ContractTest
 					throw new ArgumentOutOfRangeException(nameof(Engine), Engine, "unhandled engine type");
 			}
 
-			SimulateFrame(); // first frame runs OnEngineStartup
-
 			Console.WriteLine($"[{LunyEngine.Instance.Time.FrameCount}] SetUp => InitializeEngine() complete.");
 		}
 
@@ -48,9 +46,18 @@ namespace Luny.ContractTest
 
 			_didShutdownEngine = true;
 
-			var frameCount = LunyEngine.Instance?.Time?.FrameCount ?? -1;
+			var frameCount = LunyEngine.Instance?.Time?.FrameCount ?? Int32.MaxValue;
 			Console.WriteLine($"[{frameCount}] Teardown => ShutdownEngine() ...");
 
+			Assert.That(frameCount > 0, $"Engine initialization failure frameCount is {frameCount}");
+			if (frameCount == 1)
+			{
+				Console.WriteLine($"[{frameCount}] Teardown => SimulateFrame() to correctly run first frame to end");
+				SimulateFrame(); // avoids startup & shutdown without running frame updates - this would never occur in engines
+				frameCount = LunyEngine.Instance.Time.FrameCount;
+			}
+
+			Console.WriteLine($"[{frameCount}] Teardown => SimulateQuit() ...");
 			var internalAdapter = (ILunyEngineNativeAdapterInternal)EngineAdapter;
 			internalAdapter.SimulateQuit_UnitTestOnly();
 

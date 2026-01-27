@@ -9,12 +9,12 @@ namespace Luny.ContractTest
 	{
 		public List<String> Calls = new();
 
-		private void Awake() => Calls.Add("Awake");
-		private void Start() => Calls.Add("Start");
-		private void Update() => Calls.Add("Update");
-		private void OnEnable() => Calls.Add("OnEnable");
-		private void OnDisable() => Calls.Add("OnDisable");
-		private void OnDestroy() => Calls.Add("OnDestroy");
+		private void Awake() => Calls.Add(nameof(Awake));
+		private void Start() => Calls.Add(nameof(Start));
+		private void Update() => Calls.Add(nameof(Update));
+		private void OnEnable() => Calls.Add(nameof(OnEnable));
+		private void OnDisable() => Calls.Add(nameof(OnDisable));
+		private void OnDestroy() => Calls.Add(nameof(OnDestroy));
 	}
 
 	[TestFixture]
