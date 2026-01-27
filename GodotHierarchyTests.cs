@@ -4,10 +4,9 @@ using NUnit.Framework;
 namespace Luny.ContractTest
 {
 	[TestFixture]
-	public class GodotHierarchyTests
+	public sealed class GodotHierarchyTests : ContractTestBase
 	{
-		[SetUp]
-		public void Setup() => EngineSimulator.Reset();
+		protected override NativeEngine Engine => NativeEngine.Godot;
 
 		[Test]
 		public void Node_AddChild_UpdatesParentAndChildren()

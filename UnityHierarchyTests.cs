@@ -4,10 +4,9 @@ using UnityEngine;
 namespace Luny.ContractTest
 {
 	[TestFixture]
-	public class UnityHierarchyTests
+	public sealed class UnityHierarchyTests : ContractTestBase
 	{
-		[SetUp]
-		public void Setup() => EngineSimulator.Reset();
+		protected override NativeEngine Engine => NativeEngine.Unity;
 
 		[Test]
 		public void GameObject_ActiveInHierarchy_InheritsFromParent()

@@ -1,12 +1,11 @@
 using Godot;
-using Luny.Godot.Engine;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 
 namespace Luny.ContractTest
 {
-	public class MockNode : Node
+	public sealed class MockNode : Node
 	{
 		public List<String> Calls = new();
 
@@ -16,7 +15,7 @@ namespace Luny.ContractTest
 	}
 
 	[TestFixture]
-	public class GodotLifecycleTests : ContractTestBase
+	public sealed class GodotLifecycleTests : ContractTestBase
 	{
 		protected override NativeEngine Engine => NativeEngine.Godot;
 
@@ -36,22 +35,18 @@ namespace Luny.ContractTest
 		[Test]
 		public void Node_Lifecycle_Process_Called_During_Tick()
 		{
-			EngineSimulator.SimulateFrame(Engine);
-
 			var root = new Node { Name = "Root" };
 			root.SetInsideTree(true);
 			var child = new MockNode { Name = "Child" };
 			root.AddChild(child);
 
-			EngineSimulator.GodotTick(0.016);
+			SimulateFrame();
 			Assert.That(child.Calls, Contains.Item("_Process"));
 		}
 
 		[Test]
 		public void Node_Lifecycle_ExitTree_Called_When_Leaving_Tree()
 		{
-			EngineSimulator.SimulateFrame(Engine);
-
 			var root = new Node { Name = "Root" };
 			root.SetInsideTree(true);
 			var child = new MockNode { Name = "Child" };

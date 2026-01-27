@@ -18,12 +18,6 @@ namespace Luny.ContractTest
 				GodotTick(deltaTime);
 		}
 
-		public static void RunFrames(NativeEngine type, Int32 count, Double deltaTime = 1.0 / 60.0)
-		{
-			for (var i = 0; i < count; i++)
-				SimulateFrame(type, deltaTime);
-		}
-
 		public static void UnityTick(Single deltaTime = 1f / 60f)
 		{
 			UnityTime.frameCount++;

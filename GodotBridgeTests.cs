@@ -5,15 +5,13 @@ using System.Linq;
 namespace Luny.ContractTest
 {
 	[TestFixture]
-	public class GodotBridgeTests : ContractTestBase
+	public sealed class GodotBridgeTests : ContractTestBase
 	{
 		protected override NativeEngine Engine => NativeEngine.Godot;
 
 		[Test]
 		public void GodotObjectService_CreateEmpty_RegistersInLuny()
 		{
-			SimulateFrame(); // Advance simulation
-
 			var engine = LunyEngine.Instance;
 			Assert.That(engine, Is.Not.Null);
 			Assert.That(engine.Scene.CurrentScene, Is.Not.Null);
@@ -33,8 +31,6 @@ namespace Luny.ContractTest
 		[Test]
 		public void GodotObjectRegistry_FindByName_FindsExistingNativeNode()
 		{
-			SimulateFrame(); // Advance simulation
-
 			// Create a native node NOT through Luny, must be in CurrentScene to be found by SceneService
 			var nativeNode = new Node { Name = "NativeOnly" };
 			SceneTree.Instance.CurrentScene.AddChild(nativeNode);

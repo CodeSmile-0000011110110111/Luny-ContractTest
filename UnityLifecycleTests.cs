@@ -5,23 +5,24 @@ using UnityEngine;
 
 namespace Luny.ContractTest
 {
-	public class MockMonoBehaviour : MonoBehaviour
+	public sealed class MockMonoBehaviour : MonoBehaviour
 	{
 		public List<String> Calls = new();
 
 		private void Awake() => Calls.Add(nameof(Awake));
 		private void Start() => Calls.Add(nameof(Start));
+		private void FixedUpdate() => Calls.Add(nameof(FixedUpdate));
 		private void Update() => Calls.Add(nameof(Update));
+		private void LateUpdate() => Calls.Add(nameof(LateUpdate));
 		private void OnEnable() => Calls.Add(nameof(OnEnable));
 		private void OnDisable() => Calls.Add(nameof(OnDisable));
 		private void OnDestroy() => Calls.Add(nameof(OnDestroy));
 	}
 
 	[TestFixture]
-	public class UnityLifecycleTests
+	public sealed class UnityLifecycleTests : ContractTestBase
 	{
-		[SetUp]
-		public void Setup() => EngineSimulator.Reset();
+		protected override NativeEngine Engine => NativeEngine.Unity;
 
 		[Test]
 		public void MonoBehaviour_Lifecycle_Order()
@@ -29,9 +30,9 @@ namespace Luny.ContractTest
 			var go = new GameObject("Test");
 			var mb = go.AddComponent<MockMonoBehaviour>();
 
-			EngineSimulator.UnityTick();
+			SimulateFrame();
 
-			Assert.That(mb.Calls, Is.EqualTo(new[] { "Awake", "OnEnable", "Start", "Update" }));
+			Assert.That(mb.Calls, Is.EqualTo(new[] { "Awake", "OnEnable", "Start", "FixedUpdate", "Update", "LateUpdate" }));
 		}
 
 		[Test]
@@ -41,14 +42,14 @@ namespace Luny.ContractTest
 			go.SetActive(false);
 			var mb = go.AddComponent<MockMonoBehaviour>();
 
-			EngineSimulator.UnityTick();
+			SimulateFrame();
 
 			Assert.That(mb.Calls, Is.EqualTo(new[] { "Awake" }));
 
 			go.SetActive(true);
-			EngineSimulator.UnityTick();
+			SimulateFrame();
 
-			Assert.That(mb.Calls, Is.EqualTo(new[] { "Awake", "OnEnable", "Start", "Update" }));
+			Assert.That(mb.Calls, Is.EqualTo(new[] { "Awake", "OnEnable", "Start", "FixedUpdate", "Update", "LateUpdate" }));
 		}
 	}
 }

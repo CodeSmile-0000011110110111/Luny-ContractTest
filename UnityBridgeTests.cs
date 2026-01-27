@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Luny.ContractTest
 {
 	[TestFixture]
-	public class UnityBridgeTests : ContractTestBase
+	public sealed class UnityBridgeTests : ContractTestBase
 	{
 		protected override NativeEngine Engine => NativeEngine.Unity;
 
@@ -14,8 +14,6 @@ namespace Luny.ContractTest
 		public void UnityObjectService_CreateEmpty_RegistersInLuny()
 		{
 			MonoBehaviour.LogAllMethods(typeof(LunyEngineUnityAdapter));
-
-			SimulateFrame(); // Advance simulation to trigger Awake/Start
 
 			var engine = LunyEngine.Instance;
 			Assert.That(engine, Is.Not.Null, "LunyEngine.Instance should not be null after initialization");
@@ -36,8 +34,6 @@ namespace Luny.ContractTest
 		[Test]
 		public void UnityObjectRegistry_FindByName_FindsExistingNativeObject()
 		{
-			SimulateFrame(); // Advance simulation to trigger Awake/Start
-
 			// Create a native object NOT through Luny
 			var nativeGo = new GameObject("NativeOnly");
 
