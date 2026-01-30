@@ -83,7 +83,9 @@ namespace Luny.ContractTest
 
 			// Resetting static IDs
 			UnityObject.Reset_UnitTestsOnly();
+			Resources.Reset_UnitTestsOnly();
 			GodotObject.Reset_UnitTestsOnly();
+			ResourceLoader.Reset_UnitTestsOnly();
 
 			UnityTime.time = 0f;
 			UnityTime.frameCount = 0;

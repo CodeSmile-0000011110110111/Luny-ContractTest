@@ -1,5 +1,6 @@
 using Godot;
 using Luny.Engine;
+using Luny.Engine.Bridge;
 using Luny.Engine.Bridge.Enums;
 using NUnit.Framework;
 using System.Linq;
@@ -45,6 +46,22 @@ namespace Luny.ContractTest
 			Assert.That(lunyObj, Is.Not.Null);
 			Assert.That(lunyObj.Name, Is.EqualTo("NativeOnly"));
 			Assert.That(engine.Objects.AllObjects.Contains(lunyObj), Is.True);
+		}
+
+		[Test]
+		public void GodotObjectService_CreateFromPrefab_Works()
+		{
+			var engine = LunyEngine.Instance;
+			var prefabPath = "Prefabs/PlayerPrefab";
+
+			var obj = engine.Object.CreateFromPrefab(engine.Asset.Load<ILunyPrefab>(prefabPath));
+
+			Assert.That(obj, Is.Not.Null);
+			Assert.That(obj.Name, Is.EqualTo("InstantiatedPrefab"));
+			Assert.That(engine.Objects.AllObjects.Contains(obj), Is.True);
+			
+			var nativeNode = (Node)obj.NativeObject;
+			Assert.That(nativeNode.IsInsideTree(), Is.True);
 		}
 	}
 }

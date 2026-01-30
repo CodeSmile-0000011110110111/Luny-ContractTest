@@ -1,4 +1,5 @@
 using Luny.Engine;
+using Luny.Engine.Bridge;
 using Luny.Engine.Bridge.Enums;
 using Luny.Unity.Engine;
 using NUnit.Framework;
@@ -48,6 +49,23 @@ namespace Luny.ContractTest
 			Assert.That(lunyObj, Is.Not.Null, "FindByName should find the native object");
 			Assert.That(lunyObj.Name, Is.EqualTo("NativeOnly"), "Object name should match native name");
 			Assert.That(engine.Objects.AllObjects.Contains(lunyObj), Is.True, "Found object should be registered");
+		}
+		
+		[Test]
+		public void UnityObjectService_CreateFromPrefab_Works()
+		{
+			var engine = LunyEngine.Instance;
+			var prefabPath = "Prefabs/PlayerPrefab";
+			
+			var obj = engine.Object.CreateFromPrefab(engine.Asset.Load<ILunyPrefab>(prefabPath));
+			
+			Assert.That(obj, Is.Not.Null);
+			Assert.That(obj.Name, Does.StartWith("PlayerPrefab"));
+			Assert.That(obj.Name, Does.EndWith("(Clone)"));
+			Assert.That(engine.Objects.AllObjects.Contains(obj), Is.True);
+			
+			var nativeGo = (GameObject)obj.NativeObject;
+			Assert.That(nativeGo.activeInHierarchy, Is.True);
 		}
 	}
 }
