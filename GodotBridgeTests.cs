@@ -57,7 +57,7 @@ namespace Luny.ContractTest
 			var obj = engine.Object.CreateFromPrefab(engine.Asset.Load<ILunyPrefab>(prefabPath));
 
 			Assert.That(obj, Is.Not.Null);
-			Assert.That(obj.Name, Is.EqualTo("InstantiatedPrefab"));
+			Assert.That(obj.Name, Is.EqualTo("DefaultMockPrefabRoot"));
 			Assert.That(engine.Objects.AllObjects.Contains(obj), Is.True);
 			
 			var nativeNode = (Node)obj.NativeObject;

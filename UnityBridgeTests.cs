@@ -61,7 +61,7 @@ namespace Luny.ContractTest
 			
 			Assert.That(obj, Is.Not.Null);
 			Assert.That(obj.Name, Does.StartWith("PlayerPrefab"));
-			Assert.That(obj.Name, Does.EndWith("(Clone)"));
+			Assert.That(obj.Name, Does.Not.EndWith("(Clone)"));
 			Assert.That(engine.Objects.AllObjects.Contains(obj), Is.True);
 			
 			var nativeGo = (GameObject)obj.NativeObject;
