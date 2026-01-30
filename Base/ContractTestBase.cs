@@ -1,5 +1,6 @@
 using Godot;
 using Luny.Engine;
+using Luny.Engine.Bridge.Enums;
 using Luny.Godot.Engine;
 using Luny.Unity.Engine;
 using NUnit.Framework;
