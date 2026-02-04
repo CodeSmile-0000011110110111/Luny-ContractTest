@@ -1,7 +1,5 @@
 using Godot;
-using Luny.Engine;
 using Luny.Engine.Bridge.Enums;
-using LunyScript;
 using System;
 using System.Linq;
 using UnityEngine;

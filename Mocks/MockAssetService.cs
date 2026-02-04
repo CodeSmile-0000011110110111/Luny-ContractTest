@@ -10,7 +10,7 @@ namespace Luny.ContractTest.Mocks
 		private readonly Dictionary<String, ILunyAsset> _availableAssets = new();
 		private readonly Dictionary<Type, String[]> _extensionMapping = new()
 		{
-			{ typeof(ILunyPrefab), new[] { ".prefab", ".tscn" } }
+			{ typeof(ILunyPrefab), new[] { ".prefab", ".tscn" } },
 		};
 
 		public void AddAsset(ILunyAsset asset) => _availableAssets[asset.AssetPath.NativePath] = asset;
@@ -19,7 +19,7 @@ namespace Luny.ContractTest.Mocks
 		{
 			if (_availableAssets.TryGetValue(path.NativePath, out var asset) && asset is T typedAsset)
 				return typedAsset;
-			
+
 			return null;
 		}
 
@@ -31,7 +31,7 @@ namespace Luny.ContractTest.Mocks
 		{
 			if (typeof(T) == typeof(ILunyPrefab))
 				return new MockPrefab(0, path, true) as T;
-			
+
 			throw new NotImplementedException($"Placeholder for {typeof(T).Name} not implemented in MockAssetService");
 		}
 	}

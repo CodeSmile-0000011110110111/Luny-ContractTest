@@ -15,12 +15,12 @@ namespace Luny.ContractTest.Mocks
 			return type switch
 			{
 				LunyPathType.Asset => normalized.StartsWith("res://") ? normalized.Substring(6) :
-				                      normalized.StartsWith("Assets/Resources/") ? normalized.Substring(17) : 
-				                      normalized,
-				LunyPathType.Save => normalized.StartsWith("user://") ? normalized.Substring(7) : 
-				                     normalized.StartsWith("SaveData/") ? normalized.Substring(9) :
-				                     normalized,
-				_ => normalized
+					normalized.StartsWith("Assets/Resources/") ? normalized.Substring(17) :
+					normalized,
+				LunyPathType.Save => normalized.StartsWith("user://") ? normalized.Substring(7) :
+					normalized.StartsWith("SaveData/") ? normalized.Substring(9) :
+					normalized,
+				var _ => normalized,
 			};
 		}
 
@@ -33,7 +33,7 @@ namespace Luny.ContractTest.Mocks
 			{
 				LunyPathType.Asset => $"res://{agnosticPath}", // Defaulting to Godot-style for mock
 				LunyPathType.Save => $"user://{agnosticPath}",
-				_ => agnosticPath
+				var _ => agnosticPath,
 			};
 		}
 	}

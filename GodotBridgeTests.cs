@@ -1,5 +1,4 @@
 using Godot;
-using Luny.Engine;
 using Luny.Engine.Bridge;
 using Luny.Engine.Bridge.Enums;
 using NUnit.Framework;
@@ -59,7 +58,7 @@ namespace Luny.ContractTest
 			Assert.That(obj, Is.Not.Null);
 			Assert.That(obj.Name, Is.EqualTo("DefaultMockPrefabRoot"));
 			Assert.That(engine.Objects.AllObjects.Contains(obj), Is.True);
-			
+
 			var nativeNode = (Node)obj.NativeObject;
 			Assert.That(nativeNode.IsInsideTree(), Is.True);
 		}
