@@ -15,7 +15,7 @@ namespace Luny.ContractTest.Mocks
 
 		public void AddAsset(ILunyAsset asset) => _availableAssets[asset.AssetPath.NativePath] = asset;
 
-		protected override T LoadNative<T>(LunyAssetPath path)
+		protected override T LoadAsset<T>(LunyAssetPath path)
 		{
 			if (_availableAssets.TryGetValue(path.NativePath, out var asset) && asset is T typedAsset)
 				return typedAsset;
@@ -23,7 +23,7 @@ namespace Luny.ContractTest.Mocks
 			return null;
 		}
 
-		protected override void UnloadNative(ILunyAsset asset) {}
+		protected override void UnloadAsset(ILunyAsset asset) {}
 
 		protected override IReadOnlyDictionary<Type, String[]> GetExtensionMapping() => _extensionMapping;
 
