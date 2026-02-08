@@ -11,7 +11,7 @@ namespace Luny.ContractTest
 		public List<String> Calls = new();
 
 		public override void _Ready() => Calls.Add("_Ready");
-		public override void _Process(Double delta) => Calls.Add("_Process");
+		public override void _Process(Double deltaTime) => Calls.Add("_Process");
 		public override void _ExitTree() => Calls.Add("_ExitTree");
 	}
 
