@@ -21,8 +21,6 @@ namespace Luny.ContractTest
 			EngineSimulator.Reset();
 			_didShutdownEngine = false;
 
-			Console.WriteLine("[0] SetUp => InitializeEngine() ...");
-
 			switch (Engine)
 			{
 				case NativeEngine.Godot:
@@ -36,7 +34,7 @@ namespace Luny.ContractTest
 					throw new ArgumentOutOfRangeException(nameof(Engine), Engine, "unhandled engine type");
 			}
 
-			Console.WriteLine($"[{LunyEngine.Instance.Time.FrameCount}] SetUp => InitializeEngine() complete.");
+			Console.WriteLine("=================TEST SETUP DONE=======================");
 		}
 
 		[TearDown]
@@ -48,7 +46,7 @@ namespace Luny.ContractTest
 			_didShutdownEngine = true;
 
 			var frameCount = LunyEngine.Instance?.Time?.FrameCount ?? Int32.MaxValue;
-			Console.WriteLine($"[{frameCount}] Teardown => ShutdownEngine() ...");
+			Console.WriteLine("==================TEST TEARDOWN========================");
 
 			//Assert.That(frameCount > 0, $"Engine initialization failure frameCount is {frameCount}");
 			if (frameCount < 1)
@@ -62,14 +60,12 @@ namespace Luny.ContractTest
 			var internalAdapter = (ILunyEngineNativeAdapterInternal)EngineAdapter;
 			internalAdapter.SimulateQuit_UnitTestOnly();
 
-			Console.WriteLine($"[{frameCount}] Teardown => Disposing engine adapter ...");
 			if (EngineAdapter is IDisposable disposable)
 				disposable.Dispose();
 
-			Console.WriteLine($"[{frameCount}] Teardown => Resetting engine simulator ...");
 			EngineSimulator.Reset();
 
-			Console.WriteLine($"[{frameCount}] Teardown => ShutdownEngine() complete.");
+			Console.WriteLine("Teardown => ShutdownEngine() complete.");
 		}
 
 		protected void SimulateFrame(Double delta = 1.0 / 60.0) => EngineSimulator.SimulateFrame(Engine, delta);
