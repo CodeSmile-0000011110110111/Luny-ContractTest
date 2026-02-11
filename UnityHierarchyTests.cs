@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Luny.ContractTest
 {
 	[TestFixture]
-	public sealed class UnityHierarchyTests : ContractTestBase
+	public sealed class HierarchyUnityTests : ContractTestBase
 	{
 		protected override NativeEngine Engine => NativeEngine.Unity;
 

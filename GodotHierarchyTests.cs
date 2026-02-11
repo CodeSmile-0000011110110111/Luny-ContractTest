@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace Luny.ContractTest
 {
 	[TestFixture]
-	public sealed class GodotHierarchyTests : ContractTestBase
+	public sealed class HierarchyGodotTests : ContractTestBase
 	{
 		protected override NativeEngine Engine => NativeEngine.Godot;
 

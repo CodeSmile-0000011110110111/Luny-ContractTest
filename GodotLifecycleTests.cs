@@ -16,7 +16,7 @@ namespace Luny.ContractTest
 	}
 
 	[TestFixture]
-	public sealed class GodotLifecycleTests : ContractTestBase
+	public sealed class LifecycleGodotTests : ContractTestBase
 	{
 		protected override NativeEngine Engine => NativeEngine.Godot;
 

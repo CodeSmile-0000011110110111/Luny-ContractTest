@@ -7,7 +7,7 @@ using System.Linq;
 namespace Luny.ContractTest
 {
 	[TestFixture]
-	public sealed class GodotBridgeTests : ContractTestBase
+	public sealed class BridgeGodotTests : ContractTestBase
 	{
 		protected override NativeEngine Engine => NativeEngine.Godot;
 

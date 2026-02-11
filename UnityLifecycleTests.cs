@@ -21,7 +21,7 @@ namespace Luny.ContractTest
 	}
 
 	[TestFixture]
-	public sealed class UnityLifecycleTests : ContractTestBase
+	public sealed class LifecycleUnityTests : ContractTestBase
 	{
 		protected override NativeEngine Engine => NativeEngine.Unity;
 

@@ -8,7 +8,7 @@ using UnityEngine;
 namespace Luny.ContractTest
 {
 	[TestFixture]
-	public sealed class UnityBridgeTests : ContractTestBase
+	public sealed class BridgeUnityTests : ContractTestBase
 	{
 		protected override NativeEngine Engine => NativeEngine.Unity;
 
