@@ -29,7 +29,7 @@ namespace Luny.ContractTest.Mocks
 
 		protected override T GetPlaceholder<T>(LunyAssetPath path)
 		{
-			if (typeof(T) == typeof(ILunyPrefab))
+			if (typeof(ILunyPrefab).IsAssignableFrom(typeof(T)))
 				return new MockPrefab(0, path, true) as T;
 
 			throw new NotImplementedException($"Placeholder for {typeof(T).Name} not implemented in MockAssetService");
