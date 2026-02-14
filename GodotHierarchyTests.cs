@@ -1,5 +1,5 @@
 using Godot;
-using Luny.Engine.Bridge.Enums;
+using Luny.Engine.Bridge;
 using NUnit.Framework;
 
 namespace Luny.ContractTest

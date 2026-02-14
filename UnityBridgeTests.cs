@@ -1,5 +1,4 @@
 using Luny.Engine.Bridge;
-using Luny.Engine.Bridge.Enums;
 using Luny.Unity.Engine;
 using NUnit.Framework;
 using System.Linq;
